@@ -1,0 +1,4 @@
+pip install gdown
+gdown 1-WgmOv-NLKtjsnTTr2qwgsStHZebjgiP
+gdown 1-gjASQfNZ82KRIfyAyxg_VYLUk0U6_WV
+gdown 1-mqTRoZWkUHovQ2AQkwjw6GybKIxNFRy
