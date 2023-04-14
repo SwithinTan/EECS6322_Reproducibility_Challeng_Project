@@ -1,5 +1,7 @@
 EECS6322 Reproducibility Challenge Final Report
 
+Paper: *CNN-generated images are surprisingly easy to spot... for now*
+
 ## Main Contribution
 
 In the paper, the main contributions are:
@@ -29,6 +31,8 @@ First, I will try to verify the first and then the second if time allows.
 
    The training dataset used in the paper can be downloaded via [this google drive link](https://drive.google.com/file/d/1iVNBV0glknyTYGA9bCxT_d0CVTOgGcKh/view?usp=share_link).
 
+   
+
 2. Models
 
    Firstly, I want to verify the first claim - whether data augmentation can improve the generalization or not. I trained a series of different models with four different image augmentation techniques with one baseline.
@@ -43,17 +47,57 @@ First, I will try to verify the first and then the second if time allows.
 
    The 5 models that I trained are now on [google drive](https://drive.google.com/drive/folders/1uM2ZBbiCc_j8UXzEJdLsH5G6Y0YWUFu5?usp=share_link), and can be downloaded. 
 
+   
+
 3. Training Details
 
    I sampled 10% of the training data as validation data. I trained all models with batch size of 64, and an initial learning rate at 10e-4. The learning rate will drop by 10 times after the validation accuracy stagnates for 5 epochs. I used Google colab for training and the Tesla T4 gpu for acceleration. For each model, it took around 8 hours for training.
 
+   
+
 4. Model Evaluation
 
-   ![image-20230414015229227](/Users/swithin/Library/Application Support/typora-user-images/image-20230414015229227.png)
+   | Augmentation    | ProGAN   | StyleGAN     | BigGAN  | CycleGAN     | StarGAN      | GauGAN | CRN          | IMLE         | SITD         | SAN          | DeepFake     | StyleGAN2    | Whichfaceisreal | mAP          |
+   | --------------- | -------- | ------------ | ------- | ------------ | ------------ | ------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | --------------- | ------------ |
+   | Blur            | 0.879    | 0.6039893173 | 0.5335  | 0.6570779712 | 0.7423711856 | 0.5485 | 0.8560795989 | 0.8310090881 | 0.6305555556 | 0.5114155251 | 0.5037927845 | 0.6156109164 | 0.5145          | 0.6482616879 |
+   | JPEG            | 0.8175   | 0.5363044567 | 0.5425  | 0.5806207419 | 0.5477738869 | 0.5389 | 0.5735662802 | 0.562206205  | 0.6          | 0.497716895  | 0.5285846438 | 0.5087005508 | 0.5125          | 0.5651441277 |
+   | Blur+JPEG(0.1)  | 0.848625 | 0.5405608413 | 0.546   | 0.6824375473 | 0.7108554277 | 0.556  | 0.7663741774 | 0.7433406456 | 0.575        | 0.5228310502 | 0.513413506  | 0.5210315473 | 0.505           | 0.6178053648 |
+   | Blur+JPEG(0.5)  | 0.80425  | 0.5219495911 | 0.52675 | 0.6124148372 | 0.58004002   | 0.5449 | 0.5365089314 | 0.5680037606 | 0.575        | 0.5273972603 | 0.5097132285 | 0.5123309965 | 0.502           | 0.5631737404 |
+   | No_Augmentation | 0.950375 | 0.7053914205 | 0.5875  | 0.6937925814 | 0.8231615808 | 0.5982 | 0.9738326543 | 0.8278752742 | 0.6833333333 | 0.6095890411 | 0.5768732655 | 0.6371432148 | 0.598           | 0.7126974897 |
 
+   Table 1: **The Accuracy of models trained with different augmentation methods.**
 
+   
 
+   
 
+   | Augmentation    | ProGAN       | StyleGAN     | BigGAN       | CycleGAN     | StarGAN      | GauGAN       | CRN          | IMLE         | SITD         | SAN          | DeepFake     | StyleGAN2    | Whichfaceisreal | mAP          |
+   | --------------- | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | --------------- | ------------ |
+   | Blur            | 0.9900821954 | 0.893717847  | 0.6777326608 | 0.8488602249 | 0.9716404992 | 0.7321058271 | 0.9437832129 | 0.9184226582 | 0.9187388981 | 0.5682211066 | 0.6948618278 | 0.8727467873 | 0.6751570691    | 0.8235439088 |
+   | JPEG            | 0.9810454486 | 0.7988384267 | 0.7454003548 | 0.8212859274 | 0.7750122375 | 0.8612231284 | 0.9875796059 | 0.9878788817 | 0.7641504204 | 0.538376404  | 0.6791221034 | 0.6508763666 | 0.7151163024    | 0.7927619698 |
+   | Blur+JPEG(0.1)  | 0.9870773324 | 0.8051647144 | 0.6968184852 | 0.8893030685 | 0.8762956476 | 0.8364431426 | 0.9822766626 | 0.9776496234 | 0.7859228343 | 0.6177323581 | 0.6772670675 | 0.7381824488 | 0.7249437355    | 0.8150059324 |
+   | Blur+JPEG(0.5)  | 0.9728522685 | 0.7073263548 | 0.656408311  | 0.8559367581 | 0.8364330301 | 0.8411573479 | 0.9061048455 | 0.9585468321 | 0.6842257096 | 0.5621723013 | 0.6152030867 | 0.6371878851 | 0.5901296041    | 0.7556680257 |
+   | No_Augmentation | 0.996335379  | 0.9536072638 | 0.7243253601 | 0.8099999361 | 0.9855824952 | 0.7501473913 | 0.9970182397 | 0.9690621987 | 0.9052079268 | 0.793899671  | 0.9596584558 | 0.9172850197 | 0.6885024387    | 0.8808178289 |
+
+   Table 2: **The Average Precision of models trained with different augmentation methods.**  
+
+   
+
+   
+
+   ![Claim_1_ACC](/Users/swithin/Downloads/Claim_1_ACC.png)
+
+   Figure 1: **The effect of different augmentation methods by accuracy.**
+
+   
+
+   
+
+   ![Claim_1_AP](/Users/swithin/Downloads/Claim_1_AP.png)
+
+   Figure 2: **The effect of different augmentation methods by average precision.** The classifiers trained with CycleGAN, GauGAN, IMLE, whichfaceisreal show better performance with augmentation training data. However, the classifiers trained with StyleGAN, StarGAN, CRN, SITD, SAN, DeepFake and StyleGAN2 shows lower performance with augmentation. This conclusion is contradictory with that in the original paper. This may be because the classifiers are trained with only 1 class of training data, which is not suffcient for model training. 
+
+    
 
 ### Claim 2: Diverse Datasets Improve Generalization
 
@@ -81,7 +125,47 @@ First, I will try to verify the first and then the second if time allows.
 
 4. Model Evaluation
 
+   | Training Classes | ProGAN   | StyleGAN     | BigGAN  | CycleGAN     | StarGAN      | GauGAN | CRN          | IMLE         | SITD         | SAN          | DeepFake     | StyleGAN2    | Whichfaceisreal | mAP(mean Average Precision) |
+   | ---------------- | -------- | ------------ | ------- | ------------ | ------------ | ------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | --------------- | --------------------------- |
+   | 1 Classes        | 0.80425  | 0.5219495911 | 0.52675 | 0.6124148372 | 0.58004002   | 0.5449 | 0.5365089314 | 0.5680037606 | 0.575        | 0.5273972603 | 0.5097132285 | 0.5123309965 | 0.502           | 0.5631737404                |
+   | 3 Classes        | 0.928875 | 0.5476548156 | 0.51725 | 0.6866010598 | 0.6625812906 | 0.622  | 0.6295832028 | 0.7817298652 | 0.7222222222 | 0.50456621   | 0.5191489362 | 0.5248497747 | 0.6195          | 0.6358894136                |
+   | 5 Classes        | 0.977375 | 0.6023201469 | 0.54375 | 0.7108251325 | 0.7083541771 | 0.6736 | 0.6225321216 | 0.7440457537 | 0.6833333333 | 0.497716895  | 0.513413506  | 0.526977967  | 0.607           | 0.6470187718                |
+
+   Table 3: **The Accuracy of models trained with 1, 3, and 5 classes of data.**
+
    
+
+   | Training Classes | ProGAN       | StyleGAN     | BigGAN       | CycleGAN     | StarGAN      | GauGAN       | CRN          | IMLE         | SITD         | SAN          | DeepFake     | StyleGAN2    | Whichfaceisreal | mAP(mean Average Precision) |
+   | ---------------- | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ------------ | --------------- | --------------------------- |
+   | 1 Classes        | 0.9728522685 | 0.7073263548 | 0.656408311  | 0.8559367581 | 0.8364330301 | 0.8411573479 | 0.9061048455 | 0.9585468321 | 0.6842257096 | 0.5621723013 | 0.6152030867 | 0.6371878851 | 0.5901296041    | 0.7556680258                |
+   | 3 Classes        | 0.9956857817 | 0.8697977039 | 0.7211204318 | 0.9058420484 | 0.8994392068 | 0.9383659032 | 0.9627024299 | 0.9894784473 | 0.7927950189 | 0.5903214756 | 0.613959178  | 0.7877579329 | 0.8613755047    | 0.8406646972                |
+   | 5 Classes        | 0.9984525573 | 0.9526830379 | 0.8088701782 | 0.9269493029 | 0.9208146783 | 0.9621299622 | 0.9787728989 | 0.9947204722 | 0.8345401325 | 0.6276014018 | 0.6058929992 | 0.850303794  | 0.886694401     | 0.872955832                 |
+
+   Table 4: **The Average Precision of models trained with 1, 3, and 5 classes of data.**
+
+   
+
+   
+
+   ![Claim_2_ACC](/Users/swithin/Downloads/Claim_2_ACC.png)
+
+   Figure 3: **The Effect of diverse dataset by accuracy.** 
+
+   
+
+   
+
+   ![Claim_2_AP](/Users/swithin/Downloads/Claim_2_AP.png)
+
+   Figure 4: **The Effect of diverse dataset by average precision.** All classifiers are trained on ProGAN dataset, and tested on other generators data (AP shown). Training with more classes generally improves performance. All runs use blur and JPEG augmentation with 50% probability.
+
+   
+
+
+
+
+
+
 
 
 
@@ -94,9 +178,9 @@ First, I will try to verify the first and then the second if time allows.
 #### Difficulties
 
 1. Data Availability: Dataset downloader provided by the author has been deprecated, and the size of dataset is relatively large (~70GB), which causes some trouble when I was trying to ingest dataset. This problem has been solved by downloading original datasets and saving to another drive. 
-2. Limited Computation Power and long training time: As the training dataset is huge, the training time increases. 
+2. Limited Computation Power and long training time: As the training dataset is huge, the training time increases. Also, training on google colab for more than 12 hours is likely to corrupt accidentally. And once the training crashes, the model will not be saved. One solution is to save the best performance model so far onto google drive while training, and once crash happens, reloading the saved checkpoints from google drive again.
 
-#### Future
+#### Future Direction
 
 1. For now, I have only tested on one classification model, ResNet50. As an result, the conclusion that is drawn form this research could be dependent on the classifier. However, due to the limit of time and computation power, I haven't tried other classifiers. In the future research, other classification models like VGG could be introduced and test if the result is independent from the kind of classification model that used or not. 
 2. In this reproduction project, and in the verfication of claim 1, I only used one class - airplane for training   and comparing 5 trained models. That could be the reason why the verification of claim 1 is not successful compared with the verfication of claim 2. Because it's supposed to be using all 20 classes for the 5 models' training. I tried to train one model with all 20 classes, however, the program crashed after 20 hours training. I will try to redesign and reimplement this reproduction project if computation power and time allows in the future.
